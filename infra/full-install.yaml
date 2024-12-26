@@ -9,3 +9,4 @@
 - import_playbook: userfiles.yaml
 - import_playbook: firewall.yaml
 - import_playbook: install-spark.yaml
+- import_playbook: spark-manager.yaml
