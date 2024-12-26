@@ -1,0 +1,9 @@
+lecturer_key.pub
+coursework_task.odt
+coursework_task.pdf
+student_rubric.xlsx
+*.tfstate
+.terraform*
+.DS_Store
+.sparkpass
+.generated

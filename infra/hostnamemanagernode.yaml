@@ -1,0 +1,9 @@
+- name: Set Manager Node Hostname
+  hosts: managernode
+  become: true
+  become_user: root
+  tasks: 
+  - name: Set hostname
+    ansible.builtin.hostname:
+      name: managernode
+      use: systemd
