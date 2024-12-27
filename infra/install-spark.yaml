@@ -12,5 +12,5 @@
       src: /home/almalinux/spark.tgz
   - name: Write config file
     ansible.builtin.template:
-      src: files/spark-defaults.conf.j2
+      src: templates/spark-defaults.conf.j2
       dest: /home/almalinux/spark-3.5.4-bin-hadoop3-scala2.13/conf/spark-defaults.conf

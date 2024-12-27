@@ -1,0 +1,7 @@
+- name: Install and configure hadoop
+  hosts: managernode
+  tasks:
+  - name: format cluster
+    ansible.builtin.shell: hdfs namenode -format
+  - name: start dfs
+    ansible.builtin.shell: nohup /home/almalinux/hadoop-3.4.1/sbin/start-dfs.sh

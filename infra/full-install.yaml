@@ -8,5 +8,9 @@
 - import_playbook: sharecommonkeys.yaml
 - import_playbook: userfiles.yaml
 - import_playbook: firewall.yaml
+- import_playbook: install-hadoop.yaml
+- import_playbook: hadoop-manager.yaml
+- import_playbook: hadoop-datanodes.yaml
+- import_playbook: hadoop-final.yaml
 - import_playbook: install-spark.yaml
 - import_playbook: spark-manager.yaml

@@ -5,7 +5,7 @@
     ansible.builtin.shell: spark-3.5.4-bin-hadoop3-scala2.13/sbin/start-master.sh
   - name: Configure workers
     ansible.builtin.template: 
-      src: files/workers.j2
+      src: templates/workers.j2
       dest: /home/almalinux/spark-3.5.4-bin-hadoop3-scala2.13/conf/workers
   - name: Start workers
     ansible.builtin.shell: spark-3.5.4-bin-hadoop3-scala2.13/sbin/start-workers.sh
