@@ -1,6 +1,12 @@
-- import_playbook: update.yaml
-- import_playbook: reboot.yaml
-- import_playbook: customisations.yaml
+- name: Bootstrap machines
+  hosts: all
+  vars:
+    do_bootstrap: true
+  tasks:
+    - name: Do boostrap
+      include_role: 
+        name: bootstrap
+      when: do_bootstrap
 - import_playbook: hostnamestoragenode.yaml
 - import_playbook: hostnamemanagernode.yaml
 - import_playbook: hostnameworkers.yaml
