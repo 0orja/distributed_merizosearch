@@ -1,0 +1,30 @@
+- name: current item
+  debug:
+    msg: "{{ item.dataset_name }}"
+- name: Check datasets present
+  ansible.builtin.stat: "path=/data/{{ item.dataset_name }}/"
+  register: dataset_exists
+- name: Create directory
+  when: dataset_exists.stat.exists == False
+  ansible.builtin.file:
+    dest: "/data/{{ item.dataset_name }}"
+    state: directory
+- name: Download dataset
+  when: dataset_exists.stat.exists == False
+  ansible.builtin.get_url:
+    dest: "/data/{{ item.dataset_name }}/{{ item.dataset_name }}.tar"
+    url: "{{ item.download_url }}"
+- name: Unpack tar file
+  when: dataset_exists.stat.exists == False
+  ansible.builtin.unarchive:
+    dest: "/data/{{ item.dataset_name }}/"
+    remote_src: true
+    src: "/data/{{ item.dataset_name }}/{{ item.dataset_name }}.tar"
+- name: Remove tar archive
+  when: dataset_exists.stat.exists == False
+  ansible.builtin.file:
+    path: "/data/{{ item.dataset_name }}/{{ item.dataset_name }}.tar"
+    state: absent
+- name: Load into HDFS
+  when: dataset_exists.stat.exists == False
+  ansible.builtin.shell: "hdfs dfs -copyFromLocal /data/{{ item.dataset_name }}/ /{{ item.dataset_name }}"

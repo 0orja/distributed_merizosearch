@@ -10,9 +10,14 @@
       dest: /home/almalinux/
       remote_src: true
       src: /home/almalinux/hadoop.tar.gz
+  - name: Remove targz
+    ansible.builtin.file:
+      path: /home/almalinux/hadoop.tar.gz
+      state: absent
   - name: Set hadoop environment
     ansible.builtin.blockinfile:
       path: /home/almalinux/.bashrc
+      marker: "# {mark} ANSIBLE HADOOP BLOCK"
       block: |
         export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
         export HADOOP_HOME=/home/almalinux/hadoop-3.4.1
@@ -64,44 +69,6 @@
             <value>2</value> # number of workers - 1
         </property>
       state: present
-  # - name: config yarn-site.xml
-  #   ansible.builtin.blockinfile:
-  #     path: /home/almalinux/hadoop-3.4.1/etc/hadoop/yarn-site.xml
-  #     insertafter: <configuration>
-  #     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
-  #     block: |
-  #       <property>
-  #           <name>yarn.resourcemanager.resource-tracker.address</name>
-  #           <value>mgmtnode:8025</value>
-  #       </property>
-  #       <property>
-  #           <name>yarn.resourcemanager.scheduler.address</name>
-  #           <value>mgmtnode:8035</value>
-  #       </property>
-  #       <property>
-  #           <name>yarn.resourcemanager.address</name>
-  #           <value>mgmtnode:8050</value>
-  #       </property>
-  #       <property>
-  #           <name>yarn.log-aggregation-enable</name>
-  #           <value>true</value>
-  #       </property>
-  #     state: present
-  # - name: config mapred-site.xml
-  #   ansible.builtin.blockinfile:
-  #     path: /home/almalinux/hadoop-3.4.1/etc/hadoop/mapred-site.xml
-  #     insertafter: <configuration>
-  #     marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
-  #     block: |
-  #       <property>
-  #           <name>mapreduce.job.tracker</name>
-  #           <value>mgmtnode:5431</value>
-  #       </property>
-  #       <property>
-  #           <name>mapred.framework.name</name>
-  #           <value>yarn</value>
-  #       </property>
-  #     state: present
   - name: Fix JAVA_HOME in hadoop-env.sh
     ansible.builtin.blockinfile:
       path: /home/almalinux/hadoop-3.4.1/etc/hadoop/hadoop-env.sh 

@@ -1,0 +1,57 @@
+# This file is based off the one provided in merizo_search repo
+- name: Install merizo search requirements
+  hosts: workers
+  become: true
+  vars:
+    app_location: /home/almalinux
+    python_version: 3.9
+  tasks: 
+  - name: Check merizo_search is present
+    stat: "path={{ app_location }}merizo_search"
+    register: merizo_exist
+  - name: exists
+    debug:
+      msg: "{{ merizo_exist.stat.exists }}"
+
+  - name: Check out merizo_search from GIT
+    when: merizo_exist.stat.exists == False
+    git:
+      repo: https://github.com/psipred/merizo_search.git
+      dest: "{{ app_location }}/merizo_search"
+      clone: yes
+      force: yes
+
+  - name: Initiate virtualenv
+    when: merizo_exist.stat.exists == False
+    pip: 
+      virtualenv: "{{ app_location }}/merizosearch_env" 
+      virtualenv_python: python{{ python_version }}
+      requirements: ""
+
+  - name: Remove torch gpu from requirements
+    when: merizo_exist.stat.exists == False
+    shell: sed -i '/torch==/d' "{{ app_location }}/merizo_search/merizo_search/programs/Merizo/requirements.txt"
+  - name: Install torch-cpu
+    when: merizo_exist.stat.exists == False
+    pip:
+      name: torch==2.0.1
+      extra_args: --index-url https://download.pytorch.org/whl/cpu
+      virtualenv: "{{ app_location }}/merizosearch_env"
+      virtualenv_python: python{{ python_version }}
+      
+  - name: Install faiss
+    pip:
+      name: faiss-cpu
+      state: latest
+      virtualenv: "{{ app_location }}/merizosearch_env" 
+      virtualenv_python: python{{ python_version }}
+      virtualenv_command: /bin/virtualenv
+
+  - name: Install requirements
+    when: merizo_exist.stat.exists == False
+    pip:
+      state: latest
+      virtualenv: "{{ app_location }}/merizosearch_env"
+      virtualenv_command: /bin/virtualenv
+      virtualenv_python: "{{ app_location }}/merizo_env/bin/python"
+      requirements: "{{ app_location }}/merizo_search/merizo_search/programs/Merizo/requirements.txt"

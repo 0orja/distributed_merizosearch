@@ -5,7 +5,7 @@
   tasks:
   - name: create datanode
     ansible.builtin.file:
-      path: /opt/hadoop_tmp/hdfs/datanode
+      path: /data/hdfs/datanode
       state: directory
   - name: Set permissions
-    ansible.builtin.shell: chown -R almalinux:almalinux /opt/hadoop_tmp
+    ansible.builtin.shell: chown -R almalinux:almalinux /data

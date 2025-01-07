@@ -1,0 +1,26 @@
+- name: Get data
+  hosts: storagenode
+  vars:
+    ansible_remote_tmp: /data/tmp
+    datasets:
+      - dataset_name: ecoli
+        download_url: https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000000625_83333_ECOLI_v4.tar
+      - dataset_name: human
+        download_url: https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v4.tar
+  tasks:
+    - include_tasks: get-data-tasks.yaml
+      loop: "{{ datasets }}"
+    - name: Check if output directory exists
+      ansible.builtin.shell: "hdfs dfs -test -d /{{ item.dataset_name }}_output"
+      ignore_errors: true
+      register: create_dir # 0 if exists, 1 if not
+      loop: "{{ datasets }}"
+    - name: Create output directory
+      when: create_dir.results[ansible_loop.index0].rc == 1
+      ansible.builtin.shell: "hdfs dfs -mkdir /{{ item.dataset_name }}_output"
+      loop: "{{ datasets }}"
+      loop_control:
+        extended: true
+    - name: Get cath database
+      include_tasks: get-cath-db.yaml
+      loop: "{{ groups

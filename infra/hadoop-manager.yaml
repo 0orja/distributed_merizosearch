@@ -5,10 +5,10 @@
   tasks:
   - name: create namenode
     ansible.builtin.file:
-      path: /opt/hadoop_tmp/hdfs/namenode
+      path: /data/hdfs/namenode
       state: directory
   - name: Set permissions
-    ansible.builtin.shell: chown -R almalinux:almalinux /opt/hadoop_tmp
+    ansible.builtin.shell: chown -R almalinux:almalinux /data
   - name: generate worker file
     ansible.builtin.template:
       src: templates/workers.j2

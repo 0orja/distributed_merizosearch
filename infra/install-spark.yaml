@@ -10,6 +10,10 @@
       dest: /home/almalinux/
       remote_src: true
       src: /home/almalinux/spark.tgz
+    - name: Remove targz
+  ansible.builtin.file:
+    path: /home/almalinux/spark.tgz
+    state: absent
   - name: Write config file
     ansible.builtin.template:
       src: templates/spark-defaults.conf.j2
