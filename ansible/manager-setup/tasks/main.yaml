@@ -1,0 +1,5 @@
+---
+- name: set host name
+  import_tasks: hostnamemanagernode.yaml
+- name: create ssh keys for cluster
+  import_tasks: commonkeys.yaml

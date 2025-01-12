@@ -19,3 +19,6 @@ output "manager_vm_ips" {
 output "manager_vm_ids" {
   value = harvester_virtualmachine.managervm.*.id
 }
+output "grafana_hostname"{
+  value = local.monitoring_host_tags.condenser_ingress_grafana_hostname
+}

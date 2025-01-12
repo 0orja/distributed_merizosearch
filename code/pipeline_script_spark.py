@@ -102,6 +102,7 @@ def write_to_hdfs(local_path, id, hdfs_dir):
                 if err:
                     f.write(f'h error: {err.decode("utf-8")}\n')
                 os.remove(local_path+filename)
+                os.remove("/home/almalinux/"+id)
             except Exception as e:
                 #with open("/home/almalinux/debug_worker_log.txt", "a") as f:
                 if "No such file or directory" in str(e):
@@ -119,6 +120,18 @@ def decompress_and_copy(filepath, binary_file):
         f.write(content)
 
 def pipeline(filepath, id, content, outpath):
+    hdfs_path = "/" + outpath.split("/")[-1] + "/" + id.rstrip('.gz') + ".parsed"
+    cmd = ['hdfs', 'dfs', '-test', '-e', hdfs_path]
+    try:
+        p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+        p.communicate()
+        if p.returncode == 0:
+            print(f"{hdfs_path} already processed, skipping processing.")
+            return
+    except Exception as e:
+        with open("/home/almalinux/debug_worker_log.txt", "a") as f:
+            f.write(f"error checking hdfs path: {e}\n")
+        raise e
     os.environ["PYSPARK_PYTHON"] = "/home/almalinux/merizosearch_env/bin/python"
     os.environ["PYSPARK_DRIVER_PYTHON"] = "/home/almalinux/merizosearch_env/bin/python"
     with open("/home/almalinux/debug_worker_log.txt", "a") as f:
@@ -167,6 +180,7 @@ if __name__ == "__main__":
     print("Parallelizing the data")
     rdd = sc.binaryFiles(f"{sys.argv[1]}*.pdb.gz")
     test_rdd = sc.parallelize([1,2,3])
+    print(rdd.getNumPartitions())
     if rdd.isEmpty():
         print("rdd is empty")
     else:

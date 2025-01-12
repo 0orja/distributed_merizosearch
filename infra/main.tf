@@ -65,6 +65,8 @@ resource "harvester_virtualmachine" "managervm" {
   cloudinit {
     user_data_secret_name = harvester_cloudinit_secret.cloud-config.name
   }
+
+  tags = local.monitoring_host_tags
 }
 
 resource "harvester_virtualmachine" "storagevm" {
@@ -118,6 +120,8 @@ resource "harvester_virtualmachine" "storagevm" {
   cloudinit {
     user_data_secret_name = harvester_cloudinit_secret.cloud-config.name
   }
+
+  tags = merge(local.minio_tags, local.monitoring_host_tags, local.monitoring_client_tags)
 }
 
 resource "harvester_virtualmachine" "workervm" {
@@ -162,4 +166,6 @@ resource "harvester_virtualmachine" "workervm" {
   cloudinit {
     user_data_secret_name = harvester_cloudinit_secret.cloud-config.name
   }
+
+  tags = local.monitoring_client_tags
 }

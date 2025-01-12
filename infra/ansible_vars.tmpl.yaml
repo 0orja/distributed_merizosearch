@@ -1,0 +1,8 @@
+manager_ip: ${manager_ip}
+storage_ip: ${storage_ip}
+worker_ips:
+%{ for ip in worker_ips ~}
+  - ${ip}
+%{ endfor ~}
+grafana_hostname: ${grafana_hostname}
+nodeexporter_port: ${nodeexporter_port}

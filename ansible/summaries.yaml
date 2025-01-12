@@ -1,0 +1,22 @@
+- name: summarize results files
+  hosts: storagenode
+  vars:
+    dataset_names:
+      - ecoli
+      - human
+  tasks:
+    # - name: copy files to local
+    #   ansible.builtin.shell: "hdfs dfs -copyToLocal hdfs://managernode:9000/{{ item }}_output /data"
+    #   loop: "{{ dataset_names }}"
+    - name: push aggregator script to host
+      ansible.builtin.copy:
+        src: ../code/aggregator.py
+        dest: /data/aggregator.py
+    - name: register output paths
+      set_fact:
+        results_dirs: "{{ dataset_names | map('regex_replace', '^(.*)$', '/home/almalinux/data/\\1_output') | join(' ') }}"
+    - name: debug
+      debug:
+        msg: "{{ results_dirs }}"
+    - name: run aggregator script
+      ansible.builtin.shell: "python3 /data/aggregator.py {{ results_dirs }}"

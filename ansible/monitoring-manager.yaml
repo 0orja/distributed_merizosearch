@@ -1,0 +1,46 @@
+- name: set up prometheus 
+  hosts: storagenode
+  become: true
+  vars_files:
+    - vars/main.yaml
+  tasks:
+  # - name: Install go
+  #   ansible.builtin.dnf:
+  #     name: golang
+  #     state: present
+  # - name: Get epel repository
+  #   ansible.builtin.dnf:
+  #     name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+  #     state: present
+  # - name: accpept key
+  #   ansible.builtin.shell: rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-9
+  # - name: Install prometheus
+  #   ansible.builtin.dnf:
+  #     name: golang-github-prometheus 
+  #     state: present
+  # - name: Install node-exporter
+  #   ansible.builtin.dnf:
+  #     name: golang-github-prometheus-node-exporter
+  #     state: present
+  #     disable_gpg_check: true
+  # - name: start prometheus
+  #   ansible.builtin.shell: sudo prometheus --config.file=/etc/prometheus/prometheus.yml
+  - name: install grafana
+    ansible.builtin.dnf:
+      name: grafana
+      state: present
+  # - name: start grafana
+  #   ansible.builtin.shell: sudo systemctl start grafana-server
+  # - name: enable grafana
+  #   ansible.builtin.shell: sudo systemctl enable grafana-server
+  - name: generate dashboard file to node
+    ansible.builtin.template:
+      src: files/test-dashboard.json.j2
+      dest: /home/almalinux/test-dashboard.json
+  - name: deploy grafana dashboard
+    community.grafana.grafana_dashboard:
+      path: /home/almalinux/test-dashboard.json
+      grafana_url: "https://{{ grafana_hostname }}.comp0235.condenser.arc.ucl.ac.uk"
+      slug: cluster-dashboard-ansible
+      state: present
+      commit_message: "Deployed by ansible"

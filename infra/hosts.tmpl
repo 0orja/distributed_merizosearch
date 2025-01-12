@@ -1,0 +1,10 @@
+[managernode]
+${manager_ip}
+
+[storagenode]
+${storage_ip}
+
+[workers]
+%{ for ip in worker_ips ~}
+${ip}
+%{ endfor ~}

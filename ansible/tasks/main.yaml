@@ -1,0 +1,9 @@
+- name: Create datanodes
+  become: true
+  ansible.builtin.file:
+    path: /data/hdfs/datanode
+    state: directory
+
+- name: Set permissions
+  become: true
+  ansible.builtin.shell: chown -R almalinux:almalinux /data

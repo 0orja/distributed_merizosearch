@@ -1,0 +1,9 @@
+- name: download cath database
+  import_tasks: get-cath-db.yaml
+  
+- name: install merizo-search 
+  vars:
+    app_location: /home/almalinux
+    python_version: 3.9
+  become: true
+  import_tasks: install-merizo.yaml

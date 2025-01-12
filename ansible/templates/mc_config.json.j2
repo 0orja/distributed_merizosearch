@@ -1,0 +1,12 @@
+{
+        "version": "10",
+        "aliases": {
+                "local": {
+                        "url": "https://{{inventory_hostname}}:9200",
+                        "accessKey": "minioadmin",
+                        "secretKey": "{{lookup('ansible.builtin.file','./.miniopass')}}",
+                        "api": "s3v4",
+                        "path": "auto"
+                }
+        }
+}

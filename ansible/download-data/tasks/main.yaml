@@ -1,0 +1,19 @@
+- name: connect to hdfs 
+  ansible.builtin.shell: /home/almalinux/hadoop-3.4.1/sbin/hadoop-daemon.sh start datanode
+
+- name: download data and store in hdfs
+  import_tasks: get-data.yaml
+  loop: "{{ datasets }}"
+
+- name: Check if output directory exists
+  ansible.builtin.shell: "hdfs dfs -test -d /{{ item.dataset_name }}_output"
+  ignore_errors: true
+  register: create_dir # 0 if exists, 1 if not
+  loop: "{{ datasets }}"
+
+- name: Create output directory
+  when: create_dir.results[ansible_loop.index0].rc == 1
+  ansible.builtin.shell: "hdfs dfs -mkdir /{{ item.dataset_name }}_output"
+  loop: "{{ datasets }}"
+  loop_control:
+    extended: true

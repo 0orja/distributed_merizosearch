@@ -1,0 +1,8 @@
+- name: start namenode
+  import_tasks: hdfs-namenode.yaml
+
+- name: initialize spark
+  import_tasks: spark-manager.yaml
+
+- name: start hdfs daemons
+  import_tasks: hdfs-daemons.yaml
