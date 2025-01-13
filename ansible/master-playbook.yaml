@@ -1,0 +1,3 @@
+- import_playbook: setup-playbook.yaml
+- import_playbook: prepare-playbook.yaml
+- import_playbook: deploy-playbook.yaml
