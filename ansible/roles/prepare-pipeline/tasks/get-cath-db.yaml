@@ -1,0 +1,25 @@
+- name: Check if present
+  ansible.builtin.stat: 
+    path: "/data/cath_foldclassdb/"
+  register: foldclass_db
+- name: Create database dir
+  when: foldclass_db.stat.exists == 0
+  ansible.builtin.file:
+    dest: "/data/cath_foldclassdb"
+    state: directory
+- name: Download cath database
+  when: foldclass_db.stat.exists == 0
+  ansible.builtin.get_url: 
+    dest: /data/cath_foldclassdb.tar.gz
+    url: http://bioinfadmin.cs.ucl.ac.uk/downloads/merizo_search/cath_foldclassdb.tar.gz
+- name: Unpack tgz file
+  when: foldclass_db.stat.exists == 0
+  ansible.builtin.unarchive:
+    dest: /data/cath_foldclassdb/
+    remote_src: true
+    src: /data/cath_foldclassdb.tar.gz
+- name: Remove tgz file
+  when: foldclass_db.stat.exists == 0
+  ansible.builtin.file:
+    path: /data/cath_foldclassdb.tar.gz
+    state: absent

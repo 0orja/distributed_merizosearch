@@ -1,6 +1,0 @@
-ansible_remote_tmp: /data/tmp
-datasets:
-  - dataset_name: ecoli
-    download_url: https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000000625_83333_ECOLI_v4.tar
-  - dataset_name: human
-    download_url: https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v4.tar

@@ -1,9 +1,0 @@
----
-- name: share keys
-  import_tasks: sharecommonkeys.yaml
-
-- name: set ssh config
-  import_tasks: ssh-config-file.yaml
-
-- name: enable ufw firewall
-  import_tasks: firewall.yaml

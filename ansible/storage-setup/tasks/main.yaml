@@ -1,5 +1,0 @@
----
-- name: set host name
-  import_tasks: hostnamestoragenode.yaml
-- name: mount second disk
-  import_tasks: second-disk.yaml

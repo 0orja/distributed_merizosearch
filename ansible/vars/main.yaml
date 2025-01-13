@@ -1,8 +1,0 @@
-manager_ip: 10.134.12.172
-storage_ip: 10.134.12.101
-worker_ips:
-  - 10.134.12.147
-  - 10.134.12.128
-  - 10.134.12.76
-grafana_hostname: grafana-ucabojm
-nodeexporter_port: 9100

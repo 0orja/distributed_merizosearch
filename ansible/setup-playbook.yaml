@@ -1,0 +1,32 @@
+# sets up the cluster infrastructure
+- name: Bootstrap machines
+  hosts: all
+  become: true
+  vars:
+    do_upgrade: false
+  roles:
+    - role: bootstrap
+    - role: ssh-setup
+  
+- name: configure monitoring
+  hosts: all
+  vars_files: 
+    - vars.yaml
+  roles: 
+    - role: monitoring
+
+- name: install spark and hadoop
+  hosts: all
+  roles:
+    - hadoop
+    - spark
+
+- name: set up minio
+  hosts: storagenode
+  vars_files: 
+    - vars.yaml
+  roles: 
+    - role: minio
+      vars: 
+        force_create_new_certs: true
+      

@@ -1,0 +1,12 @@
+manager_ip: 10.134.12.172
+storage_ip: 10.134.12.101
+worker_ips:
+  - 10.134.12.147
+  - 10.134.12.128
+  - 10.134.12.76
+prometheus_port: 9090
+grafana_hostname: grafana-ucabojm
+nodeexporter_port: 9100
+minio_s3_port: 9200
+minio_s3_hostname: ucabojm-s3
+minio_console_port: 9201

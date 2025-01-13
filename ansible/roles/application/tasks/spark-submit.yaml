@@ -1,0 +1,21 @@
+- name: push pipeline script to manager
+  ansible.builtin.copy:
+    src: ../src/pipeline_script_spark.py
+    dest: /home/almalinux/pipeline_script_spark.py
+- name: push results parser to manager
+  ansible.builtin.copy:
+    src: ../src/results_parser.py
+    dest: /home/almalinux/results_parser.py
+- name: Run spark job
+  ansible.builtin.shell: |
+    spark-3.5.4-bin-hadoop3-scala2.13/bin/spark-submit \
+    --master spark://managernode:7077 \
+    --executor-cores 1 \
+    --total-executor-cores 9 \
+    --executor-memory 9G \
+    --conf spark.executorEnv.PYSPARK_PYTHON=/home/almalinux/merizosearch_env/bin/python \
+    --py-files results_parser.py \
+    pipeline_script_spark.py \
+    hdfs://managernode:9000/{{ item }}/ \
+    hdfs://managernode:9000/{{ item }}_output_second
+  loop: "{{ dataset_names }}"

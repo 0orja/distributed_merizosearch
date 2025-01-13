@@ -1,0 +1,17 @@
+- name: install hadoop
+  import_tasks: install.yaml
+
+- name: hdfs namenode
+  import_tasks: hdfs-namenode.yaml
+  when: inventory_hostname in groups['managernode']
+
+- name: hdfs datanode
+  ansible.builtin.file:
+    path: /data/hdfs/datanode
+    state: directory
+  when: inventory_hostname in groups['workers'] or inventory_hostname in groups['storagenode']
+
+- name: start hdfs
+  import_tasks: start-hdfs.yaml
+  when: inventory_hostname in groups['managernode']
+  

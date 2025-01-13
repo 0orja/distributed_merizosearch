@@ -1,0 +1,29 @@
+# - name: copy files to local
+#   ansible.builtin.shell: "hdfs dfs -copyToLocal hdfs://managernode:9000/{{ item }}_output /data"
+#   loop: "{{ dataset_names }}"
+- name: push aggregator script to host
+  ansible.builtin.copy:
+    src: ../src/aggregator.py
+    dest: /data/aggregator.py
+- name: concat output paths
+  set_fact:
+    results_dirs: "{{ dataset_names | map('regex_replace', '^(.*)$', '/home/almalinux/data/\\1_output') | join(' ') }}"
+- name: results dirs
+  debug:
+    msg: "{{ results_dirs }}"
+- name: run aggregator
+  ansible.builtin.shell: "python3 /data/aggregator.py {{ results_dirs }}"
+
+- name: create bucket
+  ansible.builtin.shell: mc mb local/merizosearch-results
+  ignore_errors: true # ignore if bucket already exists
+- name: allow anonymous gets
+  ansible.builtin.shell: mc anonymous set download local/merizosearch-results
+- name: upload results files
+  ansible.builtin.shell: "mc cp --recursive /home/almalinux/data/{{ item }}_output/ local/merizosearch-results/{{ item }}_output"
+  loop: "{{ dataset_names }}"
+- name: upload summary files
+  ansible.builtin.shell: "mc cp /home/almalinux/data/{{ item }}_summary.csv local/merizosearch-results/{{ item }}_summary.csv"
+  loop: "{{ dataset_names }}"
+- name: upload means file
+  ansible.builtin.shell: "mc cp /home/almalinux/data/pIDDT_means.csv local/merizosearch-results/plDDT_means.csv"   

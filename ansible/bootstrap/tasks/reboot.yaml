@@ -1,3 +1,0 @@
-- name: Post-update reboot
-  become: true
-  reboot:

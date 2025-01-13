@@ -1,0 +1,22 @@
+# runs the spark application and generate output
+- name: deploy application 
+  hosts: managernode
+  vars:
+    dataset_names:
+      - ecoli
+  tasks:
+    - include_role:
+        name: application
+        tasks_from: spark-submit
+
+- name: compute and upload results
+  hosts: storagenode
+  vars:
+    dataset_names:
+      - ecoli
+      - human
+  tasks:
+  - include_role:
+      name: application
+      tasks_from: compute-results
+

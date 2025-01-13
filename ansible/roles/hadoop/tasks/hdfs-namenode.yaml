@@ -1,0 +1,13 @@
+- name: create namenode
+  become: true
+  ansible.builtin.file:
+    path: /data/hdfs/namenode
+    state: directory
+- name: Set permissions on hdfs directory
+  become: true
+  ansible.builtin.shell: chown -R almalinux:almalinux /data
+- name: generate worker file
+  become: true
+  ansible.builtin.template:
+    src: templates/datanodes.j2 # set the workers + the storage node as datanodes
+    dest: /home/almalinux/hadoop-3.4.1/etc/hadoop/workers

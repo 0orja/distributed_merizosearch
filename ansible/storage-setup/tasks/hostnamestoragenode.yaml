@@ -1,6 +1,0 @@
-- name: Set storage node hostname
-  become: true
-  become_user: root
-  ansible.builtin.hostname:
-    name: storagenode
-    use: systemd

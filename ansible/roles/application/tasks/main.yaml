@@ -1,0 +1,8 @@
+- name: trigger spark job
+  import_tasks: spark-submit.yaml
+
+- name: compute summaries
+  import_tasks: compute-summaries.yaml
+
+- name: upload results files to minio
+  import_tasks: upload-results.yaml

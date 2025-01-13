@@ -1,0 +1,6 @@
+- name: install spark
+  import_tasks: install.yaml
+
+- name: initialize spark
+  import_tasks: spark-manager.yaml
+  when: inventory_hostname in groups['managernode']

@@ -1,0 +1,20 @@
+- name: received vars
+  debug:
+    var: datasets
+
+- name: download data and store in hdfs
+  include_tasks: get-data.yaml
+  loop: "{{ datasets }}"
+
+- name: Check if output directory exists
+  ansible.builtin.shell: "hdfs dfs -test -d /{{ item.dataset_name }}_output"
+  ignore_errors: true
+  register: create_dir # 0 if exists, 1 if not
+  loop: "{{ datasets }}"
+
+- name: Create output directory
+  when: create_dir.results[ansible_loop.index0].rc == 1
+  ansible.builtin.shell: "hdfs dfs -mkdir /{{ item.dataset_name }}_output"
+  loop: "{{ datasets }}"
+  loop_control:
+    extended: true

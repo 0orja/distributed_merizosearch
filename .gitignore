@@ -2,7 +2,9 @@ lecturer_key.pub
 coursework_task.odt
 coursework_task.pdf
 student_rubric.xlsx
+example_files/
 *.tfstate
+*.tfstate.backup
 .terraform*
 .DS_Store
 .sparkpass

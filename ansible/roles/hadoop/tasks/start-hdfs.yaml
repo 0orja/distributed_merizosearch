@@ -1,0 +1,9 @@
+- name: Check if NameNode is already formatted
+  stat:
+    path: "/data/hdfs/namenode/current/"
+  register: namenode_status
+- name: format cluster
+  ansible.builtin.shell: hdfs namenode -format -force
+  when: not namenode_status.stat.exists
+- name: start dfs
+  ansible.builtin.shell: nohup /home/almalinux/hadoop-3.4.1/sbin/start-dfs.sh

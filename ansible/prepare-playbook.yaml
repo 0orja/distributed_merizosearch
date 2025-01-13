@@ -1,0 +1,20 @@
+# loads the data and requirements
+- name: get and load datasets
+  hosts: storagenode
+  vars:
+    ansible_remote_tmp: /data/ansible_tmp
+    datasets:
+      - dataset_name: ecoli
+        download_url: https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000000625_83333_ECOLI_v4.tar
+      - dataset_name: human
+        download_url: https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000005640_9606_HUMAN_v4.tar
+      - dataset_name: helpy
+        download_url: https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/UP000000429_85962_HELPY_v4.tar
+  roles: 
+  - data
+
+- name: install merizo-search on workers
+  hosts: workers
+  roles: 
+  - prepare-pipeline
+

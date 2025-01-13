@@ -1,0 +1,6 @@
+{% for hostname in groups['workers'] %}
+{{ hostname }}
+{% endfor %}
+{% for hostname in groups['storagenode'] %}
+{{ hostname }}
+{% endfor %}
