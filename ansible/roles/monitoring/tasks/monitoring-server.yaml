@@ -41,7 +41,7 @@
 
 - name: generate dashboard file to node
   ansible.builtin.template:
-    src: templates/test-dashboard.json.j2 # inject instance IPs into the json template
+    src: templates/grafana-dashboard.json.j2 # inject instance IPs into the json template
     dest: /home/almalinux/grafana-template-dashboard.json
 - name: deploy grafana dashboard
   community.grafana.grafana_dashboard:
